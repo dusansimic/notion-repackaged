@@ -1,0 +1,21 @@
+[
+  {
+    "url": "https://desktop-release.notion-static.com/Notion%20Setup%20@version@.exe",
+    "dest-filename": "NotionSetup.exe",
+    "dest-dirname": "notion",
+    "sha256": "b55742085cf723ea2d13dd6f97969b87329646028f540692fc8e070c16d49958",
+    "param": {
+      "version": "3.1.1"
+    }
+  },
+  {
+    "url": "https://github.com/WiseLibs/better-sqlite3/releases/download/v@version@/better-sqlite3-v@version@-electron-v@chromium@-linux-x64.tar.gz",
+    "dest-filename": "better-sqlite3.tar.gz",
+    "dest-dirname": "better-sqlite3",
+    "sha256": "9d9381dd7b53f06759916dbcfae24ede7e7e26c18ea45f00f40c35d4217ce7fb",
+    "param": {
+      "version": "9.2.2",
+      "chromium": "119"
+    }
+  }
+]

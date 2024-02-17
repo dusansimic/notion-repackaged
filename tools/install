@@ -1,0 +1,82 @@
+#!/bin/bash
+set -e
+
+# Install tool for Notion package
+
+PREFIX="${PREFIX:-/usr}"
+APP_NAME="${APP_NAME:-notion-app}"
+
+_print_help() {
+  echo "usage: $(basename "$0") [options] <pkg dir>"
+  echo ""
+  echo "  <pkg dir>               path to the notion package root directory"
+  echo ""
+  echo "  --prefix <prefix>       set filesystem prefix (default: $PREFIX)"
+  echo "  --app-name <app name>   set app name (default: $APP_NAME)"
+  echo "                          useful when packaging for distros (i.e. change to"
+  echo "                          so.notion.Notion for flatpak)"
+  echo "  --help                  print this help page"
+}
+
+if [ "$#" -lt 1 ]
+then
+  echo "incorrect use!"
+  _print_help
+  exit 1
+fi
+
+if [ "$#" -eq 1 -a "$1" = "--help" ]
+then
+  _print_help
+  exit 0
+fi
+
+while [ "$#" -gt 1 ]
+do
+  if [ "$1" = "--prefix" ]
+  then
+    shift
+    if [ -z "$1" ]
+    then
+      echo "filesystem prefix option value not specified!"
+      _print_help
+      exit 1
+    fi
+    PREFIX="$1"
+    shift
+  elif [ "$1" = "--app-name" ]
+  then
+    shift
+    if [ -z "$1" ]
+    then
+      echo "app name option value not specified!"
+      _print_help
+      exit 1
+    fi
+    APP_NAME="$1"
+    shift
+  elif [ "$1" = "--help" ]
+  then
+    _print_help
+    exit 0
+  fi
+done
+
+PKGDIR="$1"
+if [ ! -d "$PKGDIR" ]
+then
+  echo "notion package directory '$PKGDIR' doesn't exist"
+  exit 1
+fi
+
+if [ ! -d "$PREFIX" ]
+then
+  echo "prefix directory '$PREFIX' doesn't exist"
+  exit 1
+fi
+
+# Copy Notion package
+cp -a -t "$PREFIX" "$PKGDIR"/*
+
+# Patch Notion package
+sed -i "s~@prefix@~$PREFIX~g" "$PREFIX/bin/notion-app"

@@ -1,0 +1,12 @@
+#!/usr/bin/bash
+XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-~/.config}
+PREFIX="@prefix@"
+ELECTRON="$PREFIX@electron@"
+
+# Allow users to override command-line options
+if [[ -f $XDG_CONFIG_HOME/notion-flags.conf ]]; then
+    NOTION_USER_FLAGS="$(grep -v '^#' $XDG_CONFIG_HOME/notion-flags.conf)"
+fi
+
+# Launch
+exec $PREFIX$ELECTRON /usr/lib/notion-app $NOTION_USER_FLAGS "$@"

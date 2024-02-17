@@ -4,7 +4,7 @@ set -e
 source `dirname $0`/_utils.sh
 workdir ${WORKSPACE_BUILD_DIR}
 
-check-cmd curl md5sum
+# check-cmd curl sha256sum bsdtar
 check-env NOTION_VERSION NOTION_DOWNLOAD_HASH
 
 export NOTION_DOWNLOAD_URL="https://desktop-release.notion-static.com/Notion%20Setup%20${NOTION_VERSION}.exe"
@@ -19,6 +19,6 @@ log "Downloading Notion Windows package..."
 curl "${NOTION_DOWNLOAD_URL}" --output "${NOTION_DOWNLOADED_NAME}"
 
 log "Verifying downloaded package checksum..."
-echo "${NOTION_DOWNLOAD_HASH}  ${NOTION_DOWNLOADED_NAME}" | md5sum --check -
+echo "${NOTION_DOWNLOAD_HASH}  ${NOTION_DOWNLOADED_NAME}" | sha256sum --check -
 
 popd > /dev/null
