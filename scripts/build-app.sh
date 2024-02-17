@@ -14,9 +14,12 @@ install -d "${PKGDIR}${BINDIR}"
 install -d "${PKGDIR}${DATADIR}"
 install -d "${PKGDIR}${LIBDIR}"
 
-log "Install electron..."
-install -d "${PKGDIR}${LIBDIR}/electron"
-npm install --prefix "${PKGDIR}${LIBDIR}/electron" electron@28
+if [ "${ADD_ELECTRON}" = "true" ]
+then
+  log "Installing electron..."
+  install -d "${PKGDIR}${LIBDIR}/electron"
+  npm install --prefix "${PKGDIR}${LIBDIR}/electron" electron@28
+fi
 
 pushd "${SRCDIR}/notion" > /dev/null
 
@@ -25,7 +28,12 @@ cp -a unpacked/{package.json,node_modules,.webpack} "${PKGDIR}${LIBDIR}"
 
 log "Installing and patching run script..."
 install -Dm755 "${BASEDIR}/sources/notion-app" -t "${PKGDIR}${BINDIR}"
-sed -i "s~@electron@~${LIBDIR}/electron/node_modules/.bin/electron~g" "${PKGDIR}${BINDIR}/notion-app"
+if [ "${ADD_ELECTRON}" = "true" ]
+then
+  sed -i "s~@electron@~${LIBDIR}/electron/node_modules/.bin/electron~g" "${PKGDIR}${BINDIR}/notion-app"
+else
+  log "Not adding electron... skipping patching step..."
+fi
 
 log "Installing icons and desktop file..."
 install -Dm644 "${BASEDIR}/sources/notion-app.desktop" -t "${PKGDIR}${DATADIR}/applications"

@@ -40,9 +40,19 @@ jobs:
     name: Build app
     needs: [prepare-sources]
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        add_electron: [true, false]
+        suffix: ["-electron", ""]
+        exclude:
+          - add_electron: true
+            suffix: ""
+          - add_electron: false
+            suffix: "-electron"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
+        if: matrix.add_electron
         with:
           node-version: 18
       - name: Retrieve saved sources
@@ -53,12 +63,16 @@ jobs:
         run: mkdir work && tar -xf src.tar.xz -C work
       - name: Build app
         working-directory: scripts
+        env:
+          ADD_ELECTRON: ${{ matrix.add_electron }}
         run: bash build-app.sh
       - name: Package app
         working-directory: scripts
+        env:
+          SUFFIX: ${{ matrix.suffix }}
         run: bash package-app.sh
       - name: Calculate checksum
-        run: sha256sum notion-app.tar.xz
+        run: sha256sum notion-app${{ matrix.suffix }}.tar.xz > notion-app${{ matrix.suffix }}.checksum
 
   cleanup:
     name: Cleanup artifacts
