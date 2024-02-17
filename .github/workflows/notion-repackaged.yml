@@ -73,13 +73,41 @@ jobs:
         run: bash package-app.sh
       - name: Calculate checksum
         run: sha256sum notion-app${{ matrix.suffix }}.tar.xz > notion-app${{ matrix.suffix }}.checksum
+      - name: Upload package and checksum
+        uses: actions/upload-artifact@v4
+        if: github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
+        with:
+          name: notion${{ matrix.suffix }}
+          path: |
+            notion-app${{ matrix.suffix }}.tar.xz
+            notion-app${{ matrix.suffix }}.checksum
+
+  release:
+    name: Create release
+    needs: [build-app]
+    if: github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Get packages from artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: notion*
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        with:
+          draft: true
+          files: |
+            notion-app*
 
   cleanup:
     name: Cleanup artifacts
     if: always()
-    needs: [build-app]
+    needs: [release]
     runs-on: ubuntu-latest
     steps:
       - uses: geekyeggo/delete-artifact@v4
         with:
-          name: sources
+          name: |
+            sources
+            notion*
