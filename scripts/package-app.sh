@@ -4,12 +4,6 @@ set -e
 source _envs.sh
 source _utils.sh
 
-if [ -z "$SUFFIX" ]
-then
-  log "SUFFIX for package archive is not defined!"
-  exit 1
-fi
-
 pushd "${BASEDIR}" > /dev/null
 
 log "Create .tar.xz archive..."
