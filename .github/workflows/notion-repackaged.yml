@@ -1,4 +1,4 @@
-name: Notion Repackaged Main
+name: Notion Repackaged
 
 on:
   push:
