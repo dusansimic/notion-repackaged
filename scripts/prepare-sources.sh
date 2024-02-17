@@ -13,6 +13,7 @@ bsdtar -xf NotionSetup.exe -C setup
 
 log "Unpack asar archive..."
 asar e setup/resources/app.asar unpacked
+convert "setup/resources/trayIcon.ico[4]" trayIcon.png
 
 log "Patching sources..."
 sed -ie 's/"win32"===process.platform/(true)/g' unpacked/.webpack/main/index.js
@@ -21,7 +22,7 @@ sed -ie 's~extra-resources~/usr/share/notion-app~g' unpacked/.webpack/main/index
 sed -ie 's/trayIcon.ico/trayIcon.png/g' unpacked/.webpack/main/index.js
 
 log "Convert app icon to png..."
-convert "unpacked/icon.ico[0]" "icon.png"
+convert unpacked/icon.ico icon.png
 
 log "Cleanup source directory..."
 rm -rf NotionSetup.exe setup
