@@ -40,7 +40,7 @@ install -Dm644 "${BASEDIR}/sources/notion-app.desktop" -t "${PKGDIR}${DATADIR}/a
 ICON_SIZES=(16 32 48 64 128 256)
 for i in "${!ICON_SIZES[@]}"
 do
-  install -Dm644 "icon-${i}.png" "${PKGDIR}${DATADIR}/icons/hicolor/${ICON_SIZES[$i]}x${ICON_SIZES[$i]}/notion-app.png"
+  install -Dm644 "icon-${i}.png" "${PKGDIR}${DATADIR}/icons/hicolor/${ICON_SIZES[$i]}x${ICON_SIZES[$i]}/apps/notion-app.png"
 done
 install -Dm644 "trayIcon.png" -t "${PKGDIR}${DATADIR}/notion-app"
 
