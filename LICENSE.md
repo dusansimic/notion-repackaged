@@ -1,3 +1,4 @@
+Copyright (c) 2024 Dušan Simić <dusan.simic1810@gmail.com>
 Copyright (c) 2012-2021 Jaime Martínez Rincón
 
 Permission is hereby granted, free of charge, to any person obtaining
