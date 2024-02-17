@@ -93,13 +93,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           pattern: notion*
-      - run: ls -l
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
           draft: true
           files: |
-            notion-app*
+            notion*/notion-app*
 
   cleanup:
     name: Cleanup artifacts
